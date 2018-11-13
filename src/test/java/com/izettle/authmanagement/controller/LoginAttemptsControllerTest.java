@@ -25,17 +25,17 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.izettle.authmanagement.dto.login.LoggedInHistory;
+import com.izettle.authmanagement.dto.login.LoginAttempt;
 import com.izettle.authmanagement.dto.login.LoggedInUserDetails;
 import com.izettle.authmanagement.dto.user.UserRegistration;
-import com.izettle.authmanagement.service.LoggedinHistoryService;
+import com.izettle.authmanagement.service.LoginAttemptService;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = LoggedInHistoryController.class)
-public class LoggedInHistoryControllerTest {
+@WebMvcTest(controllers = LoginAttemptsController.class)
+public class LoginAttemptsControllerTest {
 
 	@MockBean
-	private LoggedinHistoryService loggedinHistoryService;
+	private LoginAttemptService loginAttemptService;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -56,38 +56,38 @@ public class LoggedInHistoryControllerTest {
 	@Test
 	public void accessBeforeLogin() throws Exception {
 		SecurityContextHolder.clearContext();
-		Mockito.when(loggedinHistoryService.getLoggedInSuccessHistory(Mockito.anyString(), Mockito.any(Pageable.class)))
-				.thenReturn(new ArrayList<LoggedInHistory>());
-		mockMvc.perform(get("/loggedinHistory/success").content(objectMapper.writeValueAsString(new UserRegistration()))
+		Mockito.when(loginAttemptService.getSuccessfulLoginAttempts(Mockito.anyString(), Mockito.any(Pageable.class)))
+				.thenReturn(new ArrayList<LoginAttempt>());
+		mockMvc.perform(get("/loginAttempts/success").content(objectMapper.writeValueAsString(new UserRegistration()))
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isUnauthorized());
-		Mockito.verifyZeroInteractions(loggedinHistoryService);
+		Mockito.verifyZeroInteractions(loginAttemptService);
 	}
 
 	@Test
 	public void TestEmptyResult() throws Exception {
-		Mockito.when(loggedinHistoryService.getLoggedInSuccessHistory(Mockito.anyString(), Mockito.any(Pageable.class)))
-				.thenReturn(new ArrayList<LoggedInHistory>());
-		mockMvc.perform(get("/loggedinHistory/success").content(objectMapper.writeValueAsString(new UserRegistration()))
+		Mockito.when(loginAttemptService.getSuccessfulLoginAttempts(Mockito.anyString(), Mockito.any(Pageable.class)))
+				.thenReturn(new ArrayList<LoginAttempt>());
+		mockMvc.perform(get("/loginAttempts/success").content(objectMapper.writeValueAsString(new UserRegistration()))
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(jsonPath("$", hasSize((0))));
 	}
 
 	@Test
 	public void TestwithMaximumResults() throws Exception {
-		Mockito.when(loggedinHistoryService.getLoggedInSuccessHistory(Mockito.anyString(), Mockito.any(Pageable.class)))
+		Mockito.when(loginAttemptService.getSuccessfulLoginAttempts(Mockito.anyString(), Mockito.any(Pageable.class)))
 				.thenReturn(getMockedResults());
-		mockMvc.perform(get("/loggedinHistory/success").content(objectMapper.writeValueAsString(new UserRegistration()))
+		mockMvc.perform(get("/loginAttempts/success").content(objectMapper.writeValueAsString(new UserRegistration()))
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(jsonPath("$", hasSize((5))));
 	}
 
-	public List<LoggedInHistory> getMockedResults() {
-		List<LoggedInHistory> loggedInHistories = new ArrayList<>();
+	public List<LoginAttempt> getMockedResults() {
+		List<LoginAttempt> loginAttempts = new ArrayList<>();
 		for (int i = 0; i < 5; i++) {
-			LoggedInHistory loggedInHistory = new LoggedInHistory();
-			loggedInHistory.setLoggedInAt(LocalDateTime.now().plusHours(i));
-			loggedInHistories.add(loggedInHistory);
+			LoginAttempt loginAttempt = new LoginAttempt();
+			loginAttempt.setLoggedInAt(LocalDateTime.now().plusHours(i));
+			loginAttempts.add(loginAttempt);
 		}
-		return loggedInHistories;
+		return loginAttempts;
 	}
 }

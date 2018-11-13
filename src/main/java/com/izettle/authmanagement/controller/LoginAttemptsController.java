@@ -13,40 +13,40 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.izettle.authmanagement.dto.login.LoggedInHistory;
+import com.izettle.authmanagement.dto.login.LoginAttempt;
 import com.izettle.authmanagement.dto.login.LoggedInUserDetails;
-import com.izettle.authmanagement.service.LoggedinHistoryService;
+import com.izettle.authmanagement.service.LoginAttemptService;
 
 /**
- * The entry point for all the /loggedinHistory requests.
+ * The entry point for all the /loginAttempts requests.
  * 
  * @author Thiyagu
  * @version 1.0
  *
  */
 @RestController
-@RequestMapping("/loggedinHistory")
-public class LoggedInHistoryController {
+@RequestMapping("/loginAttempts")
+public class LoginAttemptsController {
 
 	/**
-	 * The loggedinHistory service bean.
+	 * The loginAttempt service bean.
 	 */
 	@Autowired
-	private LoggedinHistoryService loggedinHistoryService;
+	private LoginAttemptService loginAttemptService;
 
 	/**
 	 * Method to return all the top 5 recent successful login attempts.
 	 * 
-	 * @return list Of loggedInHistory
+	 * @return list Of loginAttempt
 	 */
 	@GetMapping("/success")
-	public ResponseEntity<List<LoggedInHistory>> getSuccessfulLoggedInHistory() {
+	public ResponseEntity<List<LoginAttempt>> getSuccessfulLoggedInHistory() {
 		Pageable request = PageRequest.of(0, 5, Direction.DESC, "loggedInAt");
 		String loggedInUserId = ((LoggedInUserDetails) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal()).getUserId();
-		List<LoggedInHistory> loggedInHistories = loggedinHistoryService.getLoggedInSuccessHistory(loggedInUserId,
+		List<LoginAttempt> loginAttempts = loginAttemptService.getSuccessfulLoginAttempts(loggedInUserId,
 				request);
-		return new ResponseEntity<List<LoggedInHistory>>(loggedInHistories, HttpStatus.OK);
+		return new ResponseEntity<List<LoginAttempt>>(loginAttempts, HttpStatus.OK);
 
 	}
 }

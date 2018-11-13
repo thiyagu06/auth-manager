@@ -15,12 +15,12 @@ import com.izettle.authmanagement.dto.user.UserRegistration;
  * @version 1.0
  *
  */
-@Component
+@Component("passwordValidator")
 public class PasswordValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return UserRegistration.class == clazz;
+		return UserRegistration.class.equals(clazz);
 	}
 
 	/**
@@ -33,9 +33,9 @@ public class PasswordValidator implements Validator {
 		UserRegistration registration = (UserRegistration) target;
 		UserCredential userCredential = registration.getUserCredential();
 		if (userCredential != null && !StringUtils.isEmpty(userCredential.getPassword())
-				&& userCredential.getPassword().equals(userCredential.getConfirmPassword())) {
-			errors.rejectValue("userCredentials.password", "password not match", "password do not match");
-			errors.rejectValue("userCredentials.confirmPassword", "password not match", "password do not match");
+				&& !userCredential.getPassword().equals(userCredential.getConfirmPassword())) {
+			errors.rejectValue("userCredential.password", "password not match", "password do not match");
+			errors.rejectValue("userCredential.confirmPassword", "password not match", "password do not match");
 		}
 	}
 

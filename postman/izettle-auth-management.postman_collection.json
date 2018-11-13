@@ -1,0 +1,694 @@
+{
+	"info": {
+		"_postman_id": "1c6ff09c-9916-6ff5-4d1c-9a352f1fb78c",
+		"name": "izettle-auth-management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Registration",
+			"item": [
+				{
+					"name": "Registration -success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b1b7b968-df63-4ebb-9f1e-ef75aed79b2f",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);",
+									"});",
+									"",
+									"pm.test(\"Status code name has string\", function () {",
+									"    pm.response.to.have.status(\"Created\");",
+									"});",
+									"",
+									"pm.test(\"Hashed password not sent in the response\", function () {",
+									"    pm.expect(pm.response.text()).to.not.include(\"password\");",
+									"});",
+									"",
+									"pm.test(\"confirm password field not sent in the response\", function () {",
+									"    pm.expect(pm.response.text()).to.not.include(\"confirmPassword\");",
+									"});",
+									"",
+									"pm.test(\"user credential json contains expireson\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"expiresOn\");",
+									"});",
+									"",
+									"pm.test(\"user details json contains id\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"id\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userDetails\":{\n\t\t\"firstName\":\"Thiyagu\",\n\t\t\"lastName\":\"GK6\",\n\t\t\"email\":\"thiyagu103@gmail.com\",\n\t\t\"id\":\"23\"\n\t},\n\t\"userCredential\":{\n\t\t\"password\":\"123457\",\n\t\t\"confirmPassword\":\"123457\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{port}}/register",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"register"
+							]
+						},
+						"description": "Execute the Registration process and successfully and user get created in the system."
+					},
+					"response": []
+				},
+				{
+					"name": "Registration - failure_null_data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b501c58a-9b9d-4ecc-9c6f-3a7937d597af",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userDetails\":{\n\t\n\t},\n\t\"userCredential\":{\n\t\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{port}}/register",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"register"
+							]
+						},
+						"description": "Execute the Registration process will fail when userdetail and user credential is null."
+					},
+					"response": []
+				},
+				{
+					"name": "Registration - failure_firstname_empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b501c58a-9b9d-4ecc-9c6f-3a7937d597af",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userDetails\":{\n\t\t\"firstName\":\"\",\n\t\t\"lastName\":\"GK6\",\n\t\t\"email\":\"thiyagu2103@gmail.com\",\n\t\t\"id\":\"23\"\n\t},\n\t\"userCredential\":{\n\t\t\"password\":\"123457\",\n\t\t\"confirmPassword\":\"123457\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{port}}/register",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"register"
+							]
+						},
+						"description": "Execute the Registration process will fail when userdetail and user credential is null."
+					},
+					"response": []
+				},
+				{
+					"name": "Registration - failure_lastname_empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b501c58a-9b9d-4ecc-9c6f-3a7937d597af",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userDetails\":{\n\t\t\"firstName\":\"Thiaygu\",\n\t\t\"lastName\":\"\",\n\t\t\"email\":\"thiyagu1103@gmail.com\",\n\t\t\"id\":\"23\"\n\t},\n\t\"userCredential\":{\n\t\t\"password\":\"123457\",\n\t\t\"confirmPassword\":\"123457\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{port}}/register",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"register"
+							]
+						},
+						"description": "Execute the Registration process will fail when userdetail lastname is empty"
+					},
+					"response": []
+				},
+				{
+					"name": "Registration - failure_email_empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b501c58a-9b9d-4ecc-9c6f-3a7937d597af",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userDetails\":{\n\t\t\"firstName\":\"Thiaygu\",\n\t\t\"lastName\":\"GK6\",\n\t\t\"email\":\"\"\n\t},\n\t\"userCredential\":{\n\t\t\"password\":\"123457\",\n\t\t\"confirmPassword\":\"123457\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{port}}/register",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"register"
+							]
+						},
+						"description": "Execute the Registration process will fail when userdetail email is empty"
+					},
+					"response": []
+				},
+				{
+					"name": "Registration - failure_email_invalid_format",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b501c58a-9b9d-4ecc-9c6f-3a7937d597af",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userDetails\":{\n\t\t\"firstName\":\"Thiaygu\",\n\t\t\"lastName\":\"GK6\",\n\t\t\"email\":\"thiyagu103gmail.com\"\n\t},\n\t\"userCredential\":{\n\t\t\"password\":\"123457\",\n\t\t\"confirmPassword\":\"123457\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{port}}/register",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"register"
+							]
+						},
+						"description": "Execute the Registration process will fail when userdetail email is in invalid format"
+					},
+					"response": []
+				},
+				{
+					"name": "Registration - failure_firstname_lesst_than3chars",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b501c58a-9b9d-4ecc-9c6f-3a7937d597af",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userDetails\":{\n\t\t\"firstName\":\"T\",\n\t\t\"lastName\":\"GK6\",\n\t\t\"email\":\"thiyagu2103@gmail.com\"\n\t},\n\t\"userCredential\":{\n\t\t\"password\":\"123457\",\n\t\t\"confirmPassword\":\"123457\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{port}}/register",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"register"
+							]
+						},
+						"description": "Execute the Registration process will fail when userdetail firstname is less than 3 characters"
+					},
+					"response": []
+				},
+				{
+					"name": "Registration - failure_lastname_lesst_than3chars",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b501c58a-9b9d-4ecc-9c6f-3a7937d597af",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userDetails\":{\n\t\t\"firstName\":\"Thiyagu\",\n\t\t\"lastName\":\"GK\",\n\t\t\"email\":\"thiyagu1403@gmail.com\"\n\t},\n\t\"userCredential\":{\n\t\t\"password\":\"123457\",\n\t\t\"confirmPassword\":\"123457\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{port}}/register",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"register"
+							]
+						},
+						"description": "Execute the Registration process will fail when userdetail lastname is less than 3 characters"
+					},
+					"response": []
+				},
+				{
+					"name": "Registration - failure_passwod_lesst_than6chars",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b501c58a-9b9d-4ecc-9c6f-3a7937d597af",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userDetails\":{\n\t\t\"firstName\":\"Thiyagu\",\n\t\t\"lastName\":\"GK6\",\n\t\t\"email\":\"thiyagu5103@gmail.com\"\n\t},\n\t\"userCredential\":{\n\t\t\"password\":\"1237\",\n\t\t\"confirmPassword\":\"123457\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{port}}/register",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"register"
+							]
+						},
+						"description": "Execute the Registration process will fail when usercredential passowd  is less than 6 characters"
+					},
+					"response": []
+				},
+				{
+					"name": "Registration - failure_passwod_not_matching_equal_length",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b501c58a-9b9d-4ecc-9c6f-3a7937d597af",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userDetails\":{\n\t\t\"firstName\":\"Thiyagu\",\n\t\t\"lastName\":\"GK6\",\n\t\t\"email\":\"thiyagu1803@gmail.com\"\n\t},\n\t\"userCredential\":{\n\t\t\"password\":\"123456\",\n\t\t\"confirmPassword\":\"789101\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{port}}/register",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"register"
+							]
+						},
+						"description": "Execute the Registration process will fail when usercredential password and confirm password is not matching with equal length."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SucceesfulLoggedInHistory",
+			"item": [
+				{
+					"name": "localhost:8080/loggedinHistory/success",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwtToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{hostname}}:{{port}}/loginAttempts/success",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"loginAttempts",
+								"success"
+							]
+						},
+						"description": "This Request will get all the loggedIn history of the user based on the authorization token passed."
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8080/loggedinHistory/success -- UnauthorizedAccess",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwtToken"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{hostname}}:{{port}}/loginAttempts/success",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"loginAttempts",
+								"success"
+							]
+						},
+						"description": "This Request will send request with malformed token. SO that user will get unauthorized access error."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Login-sucess",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e1046454-4bb8-4688-9ce8-184854a3b09d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Authorization header is present\", function () {",
+									"    pm.response.to.have.header(\"Authorization\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"thiyagu103@gmail.com\",\n\t\"password\":\"123457\"\n}"
+						},
+						"url": {
+							"raw": "{{hostname}}:{{port}}/login",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"login"
+							]
+						},
+						"description": "This request will do the login process successfully."
+					},
+					"response": []
+				},
+				{
+					"name": "Login-Invalid Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e1046454-4bb8-4688-9ce8-184854a3b09d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Authorization header is present\", function () {",
+									"    pm.response.to.not.have.header(\"Authorization\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"thiyagu103@gmail.com\",\n\t\"password\":\"12347\"\n}"
+						},
+						"url": {
+							"raw": "{{hostname}}:{{port}}/login",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"login"
+							]
+						},
+						"description": "This request will do the login process successfully."
+					},
+					"response": []
+				},
+				{
+					"name": "Login-Invalid User name. User not available in the system",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e1046454-4bb8-4688-9ce8-184854a3b09d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Authorization header is present\", function () {",
+									"    pm.response.to.not.have.header(\"Authorization\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"thiyaguk103@gmail.com\",\n\t\"password\":\"12347\"\n}"
+						},
+						"url": {
+							"raw": "{{hostname}}:{{port}}/login",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"login"
+							]
+						},
+						"description": "This request will do the login process successfully."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer"
+	}
+}

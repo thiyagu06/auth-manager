@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * The LoggedIn history entity.
+ * The LoginAttempt entity.
  * 
  * @author Thiyagu
  * @version 1.0
@@ -19,8 +19,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "logged_in_history")
-public class LoggedinHistoryEntity extends BaseEntity {
+@Table(name = "login_attempts")
+public class LoginAttemptEntity extends BaseEntity {
 
 	/**
 	 * 

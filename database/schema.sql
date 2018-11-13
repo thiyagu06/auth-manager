@@ -1,4 +1,6 @@
-CREATE TABLE users
+CREATE SCHEMA "izettle-auth" AUTHORIZATION postgres;
+
+CREATE TABLE "izettle-auth".users
 (
   id character varying(300) NOT NULL,
   firstname character varying(300) NOT NULL,
@@ -10,7 +12,7 @@ CREATE TABLE users
   CONSTRAINT users_email_unique_constraint UNIQUE (email)
 );
 
-CREATE TABLE user_credential
+CREATE TABLE "izettle-auth".user_credential
 (
   id character varying(300) NOT NULL,
   password character varying(200) NOT NULL,
@@ -19,12 +21,12 @@ CREATE TABLE user_credential
   password_expires_on timestamp without time zone,
   CONSTRAINT user_credentials_constraint_pk PRIMARY KEY (id),
   CONSTRAINT user_credentials_constraint_fk FOREIGN KEY (userid)
-      REFERENCES users (id) MATCH SIMPLE
+      REFERENCES "izettle-auth".users (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 
-CREATE TABLE login_attempts
+CREATE TABLE "izettle-auth".login_attempts
 (
   id character varying(300) NOT NULL,
   success boolean NOT NULL,
@@ -32,6 +34,6 @@ CREATE TABLE login_attempts
   logged_in_at timestamp without time zone,
   CONSTRAINT login_attempts_constraint_pk PRIMARY KEY (id),
   CONSTRAINT login_attempts_constraint_fk FOREIGN KEY (userid)
-      REFERENCES users (id) MATCH SIMPLE
+      REFERENCES "izettle-auth".users (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 );

@@ -16,18 +16,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import com.izettle.authmanagement.dto.login.LoggedInHistory;
-import com.izettle.authmanagement.entity.LoggedinHistoryEntity;
-import com.izettle.authmanagement.repository.LoginHistoryRepository;
+import com.izettle.authmanagement.dto.login.LoginAttempt;
+import com.izettle.authmanagement.entity.LoginAttemptEntity;
+import com.izettle.authmanagement.repository.LoginAttemptRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LoggedInHistoryServiceTest {
 
 	@Mock
-	private LoginHistoryRepository loginHistoryRepositoryMock;
+	private LoginAttemptRepository loginHistoryRepositoryMock;
 
 	@InjectMocks
-	private LoggedInHistoryServiceImpl loggedinHistoryService;
+	private LoginAttemptServiceImpl loggedinHistoryService;
 
 	@Before
 	public void setup() {
@@ -36,23 +36,23 @@ public class LoggedInHistoryServiceTest {
 
 	@Test
 	public void testLoggedInHistorySaveSuccess() {
-		LoggedInHistory loggedinHistory = Mockito.mock(LoggedInHistory.class);
-		LoggedinHistoryEntity loggedinHistoryEntity = Mockito.mock(LoggedinHistoryEntity.class);
-		Mockito.when(loginHistoryRepositoryMock.save(Mockito.any(LoggedinHistoryEntity.class)))
-				.thenReturn(loggedinHistoryEntity);
-		loggedinHistoryService.createSuccessLogin(loggedinHistory);
-		ArgumentCaptor<LoggedinHistoryEntity> pageArgument = ArgumentCaptor.forClass(LoggedinHistoryEntity.class);
+		LoginAttempt loggedinHistory = Mockito.mock(LoginAttempt.class);
+		LoginAttemptEntity loginAttemptEntity = Mockito.mock(LoginAttemptEntity.class);
+		Mockito.when(loginHistoryRepositoryMock.save(Mockito.any(LoginAttemptEntity.class)))
+				.thenReturn(loginAttemptEntity);
+		loggedinHistoryService.createSuccessLoginAttempt(loggedinHistory);
+		ArgumentCaptor<LoginAttemptEntity> pageArgument = ArgumentCaptor.forClass(LoginAttemptEntity.class);
 		Mockito.verify(loginHistoryRepositoryMock, Mockito.times(1)).save(pageArgument.capture());
 		Mockito.verifyNoMoreInteractions(loginHistoryRepositoryMock);
 	}
 
 	@Test
 	public void getLoggedInSuccessHistory() {
-		List<LoggedinHistoryEntity> expected = new ArrayList<>();
-		Page<LoggedinHistoryEntity> expectedPage = new PageImpl<>(expected);
+		List<LoginAttemptEntity> expected = new ArrayList<>();
+		Page<LoginAttemptEntity> expectedPage = new PageImpl<>(expected);
 		Mockito.when(loginHistoryRepositoryMock.findAllByUserIdAndSuccessTrue(Mockito.anyString(),
 				Mockito.any(Pageable.class))).thenReturn(expectedPage);
-		loggedinHistoryService.getLoggedInSuccessHistory("Thiyagu103@gmail.com", Mockito.mock(Pageable.class));
+		loggedinHistoryService.getSuccessfulLoginAttempts("Thiyagu103@gmail.com", Mockito.mock(Pageable.class));
 		ArgumentCaptor<Pageable> pageArgument = ArgumentCaptor.forClass(Pageable.class);
 		Mockito.verify(loginHistoryRepositoryMock, Mockito.times(1)).findAllByUserIdAndSuccessTrue(Mockito.anyString(),
 				pageArgument.capture());

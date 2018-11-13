@@ -10,12 +10,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.validation.Validator;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -41,12 +43,22 @@ public class RegistrationControllerTest {
 
 	@MockBean
 	private BCryptPasswordEncoder BCryptPasswordEncoder;
+	
+	@MockBean
+	@Qualifier("passwordValidator")
+	private Validator passwordValidator;
+	
+	@MockBean
+	@Qualifier("uniqueEmailValidator")
+	private Validator uniqueEmailValidator;
 
 	@Before
 	public void setup() {
 		SimpleModule simpleModule = new SimpleModule();
 		simpleModule.setMixInAnnotation(UserCredential.class, UserRegistionTestDto.class);
 		objectMapper.registerModule(simpleModule);
+		Mockito.when(passwordValidator.supports(Mockito.any())).thenReturn(true);
+		Mockito.when(uniqueEmailValidator.supports(Mockito.any())).thenReturn(true);
 	}
 
 	@Test

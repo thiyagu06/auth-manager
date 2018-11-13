@@ -14,7 +14,7 @@ import com.izettle.authmanagement.repository.UserRepository;
  * @author Thiyagu
  * @version 1.0
  */
-@Component
+@Component("uniqueEmailValidator")
 public class UniqueEmailValidator implements Validator {
 
 	/**
@@ -25,7 +25,7 @@ public class UniqueEmailValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return UserRegistration.class == clazz;
+		return UserRegistration.class.equals(clazz);
 	}
 
 	/**
@@ -36,7 +36,7 @@ public class UniqueEmailValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		UserRegistration registration = (UserRegistration) target;
 		if (userRepository.findByEmail(registration.getUserDetails().getEmail()).isPresent()) {
-			errors.rejectValue("userDetails.email", "email Id already exists");
+			errors.rejectValue("userDetails.email", "email Id already exists","email Id already exists");
 		}
 	}
 

@@ -5,7 +5,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.izettle.authmanagement.annotation.Validatable;
 import com.izettle.authmanagement.common.UserCredentialType;
 import com.izettle.authmanagement.dto.user.User;
 import com.izettle.authmanagement.dto.user.UserCredential;
@@ -16,7 +15,7 @@ import com.izettle.authmanagement.repository.UserCredentialRepository;
 import com.izettle.authmanagement.repository.UserRepository;
 
 /**
- * The implementation of user registration service.
+ * The implementation of registration service.
  * 
  * @author Thiyagu
  * @version
@@ -48,7 +47,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 	 */
 	@Override
 	@Transactional
-	@Validatable
 	public UserRegistration registerUser(UserRegistration userRegistration) {
 		UserEntity savedUser = userRepository.save(toUserEntity(userRegistration));
 		userRegistration.getUserDetails().setId(savedUser.getId());

@@ -1,0 +1,27 @@
+version: '3'
+services:
+  auth-manager:
+    image: thiyagu06/izettle-auth-management:latest
+    container_name: auth-manager-service
+    ports:
+    - "8081:8080"
+    environment:
+        - SPRING_PROFILES_ACTIVE=${ACTIVE_SPRING_PROFILE}
+        - DATASOURCE_USERNAME=${POSTGRES_USERNAME}
+        - DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+        - AUTH_MANAGER_SCHEMA_NAME=izettle-auth
+        - DATASOURCE_HOSTNAME=izettlepostgres
+        - DATASOURCE_PORT=5432
+        - DATASOURCE_INIT_MODE=NEVER
+    depends_on:
+    - izettlepostgres
+  izettlepostgres:
+    image: thiyagu06/izettle-auth-management-postgres:1.0
+    container_name: izettle-postgres
+    hostname: ${DB_HOSTNAME}
+    ports:
+     - "5432:5432"
+    environment:
+     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+     - POSTGRES_USER=${POSTGRES_USERNAME}
+     - POSTGRES_DB=postgres

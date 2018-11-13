@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import com.izettle.authmanagement.entity.LoggedinHistoryEntity;
+import com.izettle.authmanagement.entity.LoginAttemptEntity;
 
 /**
  * The loginHistory repository.
@@ -15,7 +15,7 @@ import com.izettle.authmanagement.entity.LoggedinHistoryEntity;
  *
  */
 @Repository
-public interface LoginHistoryRepository extends PagingAndSortingRepository<LoggedinHistoryEntity, String> {
+public interface LoginAttemptRepository extends PagingAndSortingRepository<LoginAttemptEntity, String> {
 
 	/**
 	 * The method to find the all the successful loggedin history filtered by user
@@ -25,5 +25,5 @@ public interface LoginHistoryRepository extends PagingAndSortingRepository<Logge
 	 * @param page
 	 * @return
 	 */
-	public Page<LoggedinHistoryEntity> findAllByUserIdAndSuccessTrue(String userId, Pageable page);
+	public Page<LoginAttemptEntity> findAllByUserIdAndSuccessTrue(String userId, Pageable page);
 }

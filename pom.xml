@@ -6,7 +6,7 @@
 
 	<groupId>com.izettle</groupId>
 	<artifactId>auth-management</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 
 	<name>auth-management</name>
@@ -23,7 +23,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<docker.image.prefix>thiyagu</docker.image.prefix>
+		<docker.image.prefix>thiyagu06</docker.image.prefix>
 	</properties>
 
 	<dependencies>
@@ -80,13 +80,14 @@
 			<plugin>
 				<groupId>com.spotify</groupId>
 				<artifactId>dockerfile-maven-plugin</artifactId>
-				<version>1.3.6</version>
+				<version>1.4.0</version>
 				<configuration>
-					<dockerDirectory>docker</dockerDirectory>
+					<buildArgs>
+						<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+					</buildArgs>
 					<repository>${docker.image.prefix}/izettle-${project.artifactId}</repository>
 					<imageTags>
 						<imageTag>${project.version}</imageTag>
-						<imageTag>latest</imageTag>
 					</imageTags>
 				</configuration>
 			</plugin>

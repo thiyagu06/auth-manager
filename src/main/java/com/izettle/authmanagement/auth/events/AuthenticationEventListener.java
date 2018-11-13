@@ -8,12 +8,12 @@ import org.springframework.security.authentication.event.AuthenticationSuccessEv
 import org.springframework.stereotype.Component;
 
 import com.izettle.authmanagement.dto.login.LoggedInUserDetails;
-import com.izettle.authmanagement.entity.LoggedinHistoryEntity;
-import com.izettle.authmanagement.repository.LoginHistoryRepository;
+import com.izettle.authmanagement.entity.LoginAttemptEntity;
+import com.izettle.authmanagement.repository.LoginAttemptRepository;
 
 /**
  * The Event Listener listen for authentication success event and save the data
- * into logged_in_history table.
+ * into login_attempts table.
  * 
  * @author Thiyagu
  * @version 1.0
@@ -23,10 +23,10 @@ import com.izettle.authmanagement.repository.LoginHistoryRepository;
 public class AuthenticationEventListener {
 
 	/**
-	 * The loginHistory repository field
+	 * The loginAttempt repository field
 	 */
 	@Autowired
-	private LoginHistoryRepository loginHistoryRepository;
+	private LoginAttemptRepository loginAttemptRepository;
 
 	/**
 	 * The listener method listen for authentication success event.
@@ -36,11 +36,11 @@ public class AuthenticationEventListener {
 	@EventListener
 	public void handleAuthenticationSuccessEvent(AuthenticationSuccessEvent event) {
 		LoggedInUserDetails loggedInUserDetails = (LoggedInUserDetails) event.getAuthentication().getPrincipal();
-		LoggedinHistoryEntity loggedinHistoryEntity = new LoggedinHistoryEntity();
-		loggedinHistoryEntity.setSuccess(true);
-		loggedinHistoryEntity.setLoggedInAt(LocalDateTime.now());
-		loggedinHistoryEntity.setUserId(loggedInUserDetails.getUserId());
-		loginHistoryRepository.save(loggedinHistoryEntity);
+		LoginAttemptEntity loginAttemptEntity = new LoginAttemptEntity();
+		loginAttemptEntity.setSuccess(true);
+		loginAttemptEntity.setLoggedInAt(LocalDateTime.now());
+		loginAttemptEntity.setUserId(loggedInUserDetails.getUserId());
+		loginAttemptRepository.save(loginAttemptEntity);
 	}
 
 }

@@ -13,7 +13,7 @@ import lombok.Data;
  * @version
  */
 @Data
-public class LoggedInHistory {
+public class LoginAttempt {
 
 	/**
 	 * The loggedInAt field
