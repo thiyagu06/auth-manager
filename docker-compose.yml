@@ -1,7 +1,7 @@
 version: '3'
 services:
   auth-manager:
-    image: thiyagu06/izettle-auth-management:latest
+    image: thiyagu06/izettle-auth-management:1.1
     container_name: auth-manager-service
     ports:
     - "8081:8080"
@@ -13,6 +13,8 @@ services:
         - DATASOURCE_HOSTNAME=izettlepostgres
         - DATASOURCE_PORT=5432
         - DATASOURCE_INIT_MODE=NEVER
+        - JWT_AUTH_SECRET=${JWT_AUTH_SECRET}
+        - JWT_TOKEN_EXPIRATION_SECONDS=${JWT_TOKEN_EXPIRATION_SECONDS}
     depends_on:
     - izettlepostgres
   izettlepostgres:

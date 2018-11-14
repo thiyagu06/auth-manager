@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -61,7 +62,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 					isCredentialNonExpired(userCredentialOptional.get()), !AccountStatus.LOCKED.equals(accountStatus),
 					new ArrayList<GrantedAuthority>(), userEntity.getId());
 		}
-		throw new UsernameNotFoundException("User not found in the system");
+		throw new DisabledException("User is not activated");
 	}
 
 	/**

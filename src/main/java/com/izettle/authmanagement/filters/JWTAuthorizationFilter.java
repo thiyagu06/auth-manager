@@ -14,7 +14,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import com.izettle.authmanagement.auth.jwt.JwtTokenUtil;
+import com.izettle.authmanagement.auth.jwt.JwtSettings;
+import com.izettle.authmanagement.auth.jwt.JwtTokenFactory;
 import com.izettle.authmanagement.dto.login.LoggedInUserDetails;
 
 import io.jsonwebtoken.Claims;
@@ -28,8 +29,15 @@ import io.jsonwebtoken.Claims;
  */
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
-	public JWTAuthorizationFilter(AuthenticationManager authManager) {
+	private JwtSettings jwtSettings;
+
+	private JwtTokenFactory jwtTokenFactory;
+
+	public JWTAuthorizationFilter(AuthenticationManager authManager, JwtSettings jwtSettings,
+			JwtTokenFactory jwtTokenFactory) {
 		super(authManager);
+		this.jwtSettings = jwtSettings;
+		this.jwtTokenFactory = jwtTokenFactory;
 	}
 
 	@Override
@@ -52,10 +60,10 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	}
 
 	private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-		String token = request.getHeader("Authorization");
-		if (token != null && JwtTokenUtil.validateToken(token)) {
+		String token = request.getHeader(jwtSettings.getAuthHeaderKey());
+		if (token != null && jwtTokenFactory.validateToken(token)) {
 			// parse the token.
-			Claims claims = JwtTokenUtil.parseToken(token);
+			Claims claims = jwtTokenFactory.parseToken(token);
 
 			if (claims.getSubject() != null) {
 				LoggedInUserDetails principal = new LoggedInUserDetails(claims.getSubject(), "", new ArrayList<>(),

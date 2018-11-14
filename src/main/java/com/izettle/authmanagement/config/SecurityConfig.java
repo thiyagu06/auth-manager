@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.izettle.authmanagement.auth.CustomAuthenticationEntryPoint;
+import com.izettle.authmanagement.auth.jwt.JwtSettings;
+import com.izettle.authmanagement.auth.jwt.JwtTokenFactory;
 import com.izettle.authmanagement.filters.JWTAuthorizationFilter;
 import com.izettle.authmanagement.filters.UsernameAndPasswordAuthenticationFilter;
 
@@ -32,6 +34,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 */
 	@Autowired
 	private UserDetailsService userDetailsService;
+	
+	/**
+	 * The Jwt settings
+	 */
+	@Autowired
+	private JwtSettings jwtSettings;
+	
+	/**
+	 * The Jwt token util
+	 */
+	@Autowired
+	private JwtTokenFactory jwtTokenFactory;
 
 	/**
 	 * The password encoder bean.
@@ -43,8 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().authorizeRequests().antMatchers("/error").permitAll()
 				.antMatchers(HttpMethod.POST, "/register").permitAll().anyRequest().authenticated().and()
-				.addFilter(new UsernameAndPasswordAuthenticationFilter(authenticationManager()))
-				.addFilter(new JWTAuthorizationFilter(authenticationManager()))
+				.addFilter(new UsernameAndPasswordAuthenticationFilter(authenticationManager(),jwtSettings,jwtTokenFactory))
+				.addFilter(new JWTAuthorizationFilter(authenticationManager(),jwtSettings,jwtTokenFactory))
 				// this disables session creation on Spring Security
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());

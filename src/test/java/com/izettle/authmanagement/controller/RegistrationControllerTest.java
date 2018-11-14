@@ -23,6 +23,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.izettle.authmanagement.auth.jwt.JwtSettings;
+import com.izettle.authmanagement.auth.jwt.JwtTokenFactory;
 import com.izettle.authmanagement.dto.user.User;
 import com.izettle.authmanagement.dto.user.UserCredential;
 import com.izettle.authmanagement.dto.user.UserRegistration;
@@ -51,6 +53,12 @@ public class RegistrationControllerTest {
 	@MockBean
 	@Qualifier("uniqueEmailValidator")
 	private Validator uniqueEmailValidator;
+	
+	@MockBean
+	private JwtSettings jwtSettings;
+	
+	@MockBean
+	private JwtTokenFactory jwtTokenFactory;
 
 	@Before
 	public void setup() {

@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 
 import com.izettle.authmanagement.dto.login.LoggedInUserDetails;
 
@@ -13,17 +15,23 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 /**
- * The util class for Jwt token processing.
+ * ##Changes
+ * Updates to use the JWT setting instance
+ * 
+ * The class for Jwt token processing.
  * 
  * @author thiyagu
- * @version 1.0
+ * @version 1.1
  *
  */
-public class JwtTokenUtil {
-
-	private JwtTokenUtil() {
-		// private constructor
-	}
+@Component
+public class JwtTokenFactory {
+	
+	/**
+	 * Jwt settings instance
+	 */
+	@Autowired
+	private JwtSettings jwtSettings;
 
 	/**
 	 * Parse the given JWT Token
@@ -31,8 +39,8 @@ public class JwtTokenUtil {
 	 * @param token
 	 * @return claims
 	 */
-	public static Claims parseToken(String token) {
-		Claims claims = Jwts.parser().setSigningKey("SECRET").parseClaimsJws(token.replace("Bearer ", "")).getBody();
+	public Claims parseToken(String token) {
+		Claims claims = Jwts.parser().setSigningKey(jwtSettings.getSecret()).parseClaimsJws(token.replace(jwtSettings.getHeaderPrefix(), "")).getBody();
 		return claims;
 	}
 
@@ -42,9 +50,9 @@ public class JwtTokenUtil {
 	 * @param authToken
 	 * @return boolean
 	 */
-	public static boolean validateToken(String authToken) {
+	public boolean validateToken(String authToken) {
 		try {
-			Jwts.parser().setSigningKey("SECRET").parseClaimsJws(authToken.replace("Bearer ", ""));
+			Jwts.parser().setSigningKey(jwtSettings.getSecret()).parseClaimsJws(authToken.replace(jwtSettings.getHeaderPrefix(), ""));
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -58,11 +66,11 @@ public class JwtTokenUtil {
 	 * @param authentication
 	 * @return string
 	 */
-	public static String generateToken(Authentication authentication) {
-		LocalDateTime expiresAt = LocalDateTime.now().plusHours(8);
+	public String generateToken(Authentication authentication) {
+		LocalDateTime expiresAt = LocalDateTime.now().plusSeconds(jwtSettings.getExpirationTimeInSeconds());
 		LoggedInUserDetails loggedInUserDetails = (LoggedInUserDetails) authentication.getPrincipal();
 		String token = Jwts.builder().setSubject(authentication.getName())
-				.claim("userId", loggedInUserDetails.getUserId()).signWith(SignatureAlgorithm.HS512, "SECRET")
+				.claim("userId", loggedInUserDetails.getUserId()).signWith(SignatureAlgorithm.HS512, jwtSettings.getSecret())
 				.setExpiration(Date.from(expiresAt.atZone((ZoneId.systemDefault())).toInstant())).compact();
 		return token;
 	}

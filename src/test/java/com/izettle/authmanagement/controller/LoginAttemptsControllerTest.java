@@ -26,6 +26,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.izettle.authmanagement.dto.login.LoginAttempt;
+import com.izettle.authmanagement.auth.jwt.JwtSettings;
+import com.izettle.authmanagement.auth.jwt.JwtTokenFactory;
 import com.izettle.authmanagement.dto.login.LoggedInUserDetails;
 import com.izettle.authmanagement.dto.user.UserRegistration;
 import com.izettle.authmanagement.service.LoginAttemptService;
@@ -45,6 +47,12 @@ public class LoginAttemptsControllerTest {
 
 	@MockBean
 	private BCryptPasswordEncoder BCryptPasswordEncoder;
+	
+	@MockBean
+	private JwtSettings jwtSettings;
+	
+	@MockBean
+	private JwtTokenFactory jwtTokenFactory;
 
 	@Before
 	public void setupAuthentication() {

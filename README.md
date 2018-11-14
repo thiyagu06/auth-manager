@@ -83,7 +83,7 @@ verify the image
 
 ### Testing the application
 
-The postman scripts are avaliable at https://github.com/thiyagu06/auth-manager/tree/master/postman. import both collection and environment json file in postman and execute the request in the order. All the request postman script is self explanatory for the scenario it tests. Update the Authorization header after successful login. Update the environment variable based your development environment.
+The postman scripts are avaliable at https://github.com/thiyagu06/auth-manager/tree/master/postman. import both collection and environment json file in postman and execute the request in the order. All the request postman script is self explanatory for the scenario it tests. Update the Authorization header after successful login. The header will be sent in the response header of login success. Update the environment variable based your development environment.
 
 1. Successfully register the user
 2. Login with registered user credentials

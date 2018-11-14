@@ -14,7 +14,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.izettle.authmanagement.auth.jwt.JwtTokenUtil;
+import com.izettle.authmanagement.auth.jwt.JwtSettings;
+import com.izettle.authmanagement.auth.jwt.JwtTokenFactory;
 import com.izettle.authmanagement.dto.login.UserLoginRequest;
 
 /**
@@ -27,9 +28,15 @@ import com.izettle.authmanagement.dto.login.UserLoginRequest;
 public class UsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 	private AuthenticationManager authenticationManager;
+	
+	private JwtSettings jwtSettings;
+	
+	private JwtTokenFactory jwtTokenFactory;
 
-	public UsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager) {
+	public UsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager,JwtSettings jwtSettings,JwtTokenFactory JwtTokenFactory) {
 		this.authenticationManager = authenticationManager;
+		this.jwtSettings = jwtSettings;
+		this.jwtTokenFactory = JwtTokenFactory;
 	}
 
 	@Override
@@ -49,8 +56,8 @@ public class UsernameAndPasswordAuthenticationFilter extends UsernamePasswordAut
 	@Override
 	protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
 			Authentication auth) throws IOException, ServletException {
-		String token = JwtTokenUtil.generateToken(auth);
-		res.addHeader("Authorization", "Bearer " + token);
+		String token = jwtTokenFactory.generateToken(auth);
+		res.addHeader(jwtSettings.getAuthHeaderKey(),jwtSettings.getHeaderPrefix()+" " + token);
 	}
 
 }
