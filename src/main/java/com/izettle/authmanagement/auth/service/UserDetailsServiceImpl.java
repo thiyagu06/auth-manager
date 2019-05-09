@@ -29,6 +29,10 @@ import com.izettle.authmanagement.repository.UserRepository;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+	private static String READ_PERMISSION = "read";
+
+	private static String WRITE_PERMISSION = "write";
+
 	/**
 	 * The user repository field
 	 * 
@@ -60,7 +64,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			return new LoggedInUserDetails(username, userCredentialOptional.get().getPassword(),
 					AccountStatus.ACTIVE.equals(accountStatus), !AccountStatus.EXPIRED.equals(accountStatus),
 					isCredentialNonExpired(userCredentialOptional.get()), !AccountStatus.LOCKED.equals(accountStatus),
-					new ArrayList<GrantedAuthority>(), userEntity.getId());
+					new ArrayList<>(), userEntity.getId());
 		}
 		throw new DisabledException("User is not activated");
 	}
