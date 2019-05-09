@@ -1,8 +1,11 @@
 package com.izettle.authmanagement.access;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
@@ -27,11 +30,13 @@ public class PermissionVoter implements AccessDecisionVoter<MethodInvocation> {
         if (!securityAttribute.isPresent()) {
             return AccessDecisionVoter.ACCESS_ABSTAIN;
         }
-        String roles = securityAttribute.get().getAttribute();
-        String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(
-            Collectors.joining(","));
-        if(roles.contains(authorities)) return ACCESS_GRANTED;
-
+        List<String> roles = Arrays.asList(securityAttribute.get().getAttribute().split("\\s*,\\s*"));
+        List<String> authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(
+            Collectors.toList());
+        boolean hasAccess = authorities.stream().anyMatch(element -> roles.contains(element));
+        if(hasAccess) {
+        	return AccessDecisionVoter.ACCESS_GRANTED;
+        }
         return ACCESS_ABSTAIN;
 
     }

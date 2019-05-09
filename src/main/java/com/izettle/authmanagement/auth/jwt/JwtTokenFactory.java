@@ -48,7 +48,7 @@ public class JwtTokenFactory {
 	 * @return claims
 	 */
 	public Claims parseToken(String token) {
-		Claims claims = Jwts.parser().setSigningKey(jwtSettings.getSecret()).parseClaimsJws(token.replace(jwtSettings.getHeaderPrefix(), "")).getBody();
+		Claims claims = Jwts.parser().setSigningKey(jwtSettings.getSecret().getBytes()).parseClaimsJws(token.replace(jwtSettings.getHeaderPrefix(), "")).getBody();
 		return claims;
 	}
 
@@ -60,7 +60,8 @@ public class JwtTokenFactory {
 	 */
 	public boolean validateToken(String authToken) {
 		try {
-			Jwts.parser().setSigningKey(jwtSettings.getSecret()).parseClaimsJws(authToken.replace(jwtSettings.getHeaderPrefix(), ""));
+			String token = authToken.replace(jwtSettings.getHeaderPrefix(), "").trim();
+			Jwts.parser().setSigningKey(jwtSettings.getSecret().getBytes()).parseClaimsJws(token);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -75,14 +76,11 @@ public class JwtTokenFactory {
 	 * @return string
 	 */
 	public String generateToken(Authentication authentication) {
-		/*List<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new PermissionAuthority("read_access"));
-		authorities.add(new PermissionAuthority("write_access"));*/
 		LocalDateTime expiresAt = LocalDateTime.now().plusSeconds(jwtSettings.getExpirationTimeInSeconds());
 		LoggedInUserDetails loggedInUserDetails = (LoggedInUserDetails) authentication.getPrincipal();
 		String token = Jwts.builder().setSubject(authentication.getName())
-				.claim("roles","read_access,write_access")
-				.claim("userId", loggedInUserDetails.getUserId()).signWith(SignatureAlgorithm.HS512, jwtSettings.getSecret())
+				.claim("roles","READ,WRITE")
+				.claim("userId", loggedInUserDetails.getUserId()).signWith(SignatureAlgorithm.HS512, jwtSettings.getSecret().getBytes())
 				.setExpiration(Date.from(expiresAt.atZone((ZoneId.systemDefault())).toInstant())).compact();
 		return token;
 	}

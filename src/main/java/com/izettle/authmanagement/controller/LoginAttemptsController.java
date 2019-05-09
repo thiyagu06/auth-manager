@@ -41,7 +41,7 @@ public class LoginAttemptsController {
 	 * 
 	 * @return list Of loginAttempt
 	 */
-	@PermissionRequired(Permission.READ)
+	@PermissionRequired(Permission.UPDATE)
 	@GetMapping("/success")
 	public ResponseEntity<List<LoginAttempt>> getSuccessfulLoggedInHistory() {
 		Pageable request = PageRequest.of(0, 5, Direction.DESC, "loggedInAt");
