@@ -1,11 +1,19 @@
 package com.izettle.authmanagement.auth.jwt;
 
+import com.izettle.authmanagement.access.PermissionAuthority;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import com.izettle.authmanagement.dto.login.LoggedInUserDetails;
@@ -67,9 +75,13 @@ public class JwtTokenFactory {
 	 * @return string
 	 */
 	public String generateToken(Authentication authentication) {
+		/*List<GrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new PermissionAuthority("read_access"));
+		authorities.add(new PermissionAuthority("write_access"));*/
 		LocalDateTime expiresAt = LocalDateTime.now().plusSeconds(jwtSettings.getExpirationTimeInSeconds());
 		LoggedInUserDetails loggedInUserDetails = (LoggedInUserDetails) authentication.getPrincipal();
 		String token = Jwts.builder().setSubject(authentication.getName())
+				.claim("roles","read_access,write_access")
 				.claim("userId", loggedInUserDetails.getUserId()).signWith(SignatureAlgorithm.HS512, jwtSettings.getSecret())
 				.setExpiration(Date.from(expiresAt.atZone((ZoneId.systemDefault())).toInstant())).compact();
 		return token;
