@@ -1,5 +1,7 @@
 package com.izettle.authmanagement.controller;
 
+import com.izettle.authmanagement.access.Permission;
+import com.izettle.authmanagement.access.PermissionRequired;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,7 @@ public class LoginAttemptsController {
 	 * 
 	 * @return list Of loginAttempt
 	 */
+	@PermissionRequired(Permission.READ)
 	@GetMapping("/success")
 	public ResponseEntity<List<LoginAttempt>> getSuccessfulLoggedInHistory() {
 		Pageable request = PageRequest.of(0, 5, Direction.DESC, "loggedInAt");
