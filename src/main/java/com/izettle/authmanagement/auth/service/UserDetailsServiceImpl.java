@@ -64,7 +64,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			return new LoggedInUserDetails(username, userCredentialOptional.get().getPassword(),
 					AccountStatus.ACTIVE.equals(accountStatus), !AccountStatus.EXPIRED.equals(accountStatus),
 					isCredentialNonExpired(userCredentialOptional.get()), !AccountStatus.LOCKED.equals(accountStatus),
-					new ArrayList<>(), userEntity.getId());
+					new ArrayList<>(), userEntity.getId(),"US");
 		}
 		throw new DisabledException("User is not activated");
 	}

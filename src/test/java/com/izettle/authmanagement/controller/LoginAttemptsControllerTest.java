@@ -56,7 +56,7 @@ public class LoginAttemptsControllerTest {
 
 	@Before
 	public void setupAuthentication() {
-		LoggedInUserDetails principal = new LoggedInUserDetails("USERNAME", "", new ArrayList<>(), "123445454545");
+		LoggedInUserDetails principal = new LoggedInUserDetails("USERNAME", "", new ArrayList<>(), "123445454545","US");
 		SecurityContextHolder.getContext()
 				.setAuthentication(new UsernamePasswordAuthenticationToken(principal, "", new ArrayList<>()));
 	}

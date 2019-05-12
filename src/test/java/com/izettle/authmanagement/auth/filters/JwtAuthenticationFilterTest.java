@@ -48,7 +48,7 @@ public class JwtAuthenticationFilterTest {
 
 	@Before
 	public void setUp() throws Exception {
-		LoggedInUserDetails principal = new LoggedInUserDetails("USERNAME", "", new ArrayList<>(), "123445454545");
+		LoggedInUserDetails principal = new LoggedInUserDetails("USERNAME", "", new ArrayList<>(), "123445454545","US");
 		UsernamePasswordAuthenticationToken rodRequest = new UsernamePasswordAuthenticationToken(principal, "testUser");
 		rodRequest.setDetails(new WebAuthenticationDetails(new MockHttpServletRequest()));
 		authentication = new UsernamePasswordAuthenticationToken(principal, "koala", new ArrayList<>());
