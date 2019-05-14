@@ -93,6 +93,7 @@ public class JwtAuthenticationFilterTest {
 		request.setServletPath("/test");
 		when(claims.getSubject()).thenReturn("USERNAME");
 		when(claims.get("userId")).thenReturn("userId");
+		when(claims.get("roles")).thenReturn("READ,WRITE");
 
 		// Test
 		assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();

@@ -40,19 +40,10 @@ public class PermissionVoter implements AccessDecisionVoter<MethodInvocation> {
                 Collectors.toList());
         boolean hasAccess = authorities.stream().anyMatch(element -> roles.contains(element));
         boolean hasAccessToCountry = permissionAttribute.getCountry().equalsIgnoreCase(loggedInUserDetails.getCountry());
-        //boolean hasAccess = checkAccess(authentication, securityAttribute);
         if(hasAccess & hasAccessToCountry) {
         	return AccessDecisionVoter.ACCESS_GRANTED;
         }
         return ACCESS_ABSTAIN;
 
     }
-
-	private boolean checkAccess(Authentication authentication, Optional<SecurityAttribute> securityAttribute) {
-		List<String> roles = Arrays.asList(securityAttribute.get().getAttribute().split("\\s*,\\s*"));
-        List<String> authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(
-            Collectors.toList());
-        boolean hasAccess = authorities.stream().anyMatch(element -> roles.contains(element));
-		return hasAccess;
-	}
 }
