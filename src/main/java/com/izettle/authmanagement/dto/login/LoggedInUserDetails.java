@@ -25,17 +25,21 @@ public class LoggedInUserDetails extends User {
 	private static final long serialVersionUID = 1L;
 
 	private String userId;
+	
+	private String country;
 
 	public LoggedInUserDetails(String username, String password, boolean enabled, boolean accountNonExpired,
 			boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities,
-			String userId) {
+			String userId,String country) {
 		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
 		this.userId = userId;
+		this.country=country;
 	}
 
 	public LoggedInUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities,
-			String userId) {
+			String userId,String country) {
 		super(username, password, authorities);
 		this.userId = userId;
+		this.country=country;
 	}
 }

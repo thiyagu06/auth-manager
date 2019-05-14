@@ -5,10 +5,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.izettle.authmanagement.access.PermissionAuthority;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
+import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,16 +61,18 @@ public class LoginAttemptsControllerTest {
 
 	@Before
 	public void setupAuthentication() {
-		LoggedInUserDetails principal = new LoggedInUserDetails("USERNAME", "", new ArrayList<>(), "123445454545");
+		final Collection authorities = Arrays.asList("READ","WRITE").stream().map(
+			PermissionAuthority::new).collect(Collectors.toList());
+		LoggedInUserDetails principal = new LoggedInUserDetails("USERNAME", "", authorities, "123445454545","US");
 		SecurityContextHolder.getContext()
-				.setAuthentication(new UsernamePasswordAuthenticationToken(principal, "", new ArrayList<>()));
+				.setAuthentication(new UsernamePasswordAuthenticationToken(principal, "", authorities));
 	}
 
 	@Test
 	public void accessBeforeLogin() throws Exception {
 		SecurityContextHolder.clearContext();
 		Mockito.when(loginAttemptService.getSuccessfulLoginAttempts(Mockito.anyString(), Mockito.any(Pageable.class)))
-				.thenReturn(new ArrayList<LoginAttempt>());
+				.thenReturn(Collections.emptyList());
 		mockMvc.perform(get("/loginAttempts/success").content(objectMapper.writeValueAsString(new UserRegistration()))
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isUnauthorized());
 		Mockito.verifyZeroInteractions(loginAttemptService);
@@ -74,7 +81,7 @@ public class LoginAttemptsControllerTest {
 	@Test
 	public void TestEmptyResult() throws Exception {
 		Mockito.when(loginAttemptService.getSuccessfulLoginAttempts(Mockito.anyString(), Mockito.any(Pageable.class)))
-				.thenReturn(new ArrayList<LoginAttempt>());
+				.thenReturn(Collections.emptyList());
 		mockMvc.perform(get("/loginAttempts/success").content(objectMapper.writeValueAsString(new UserRegistration()))
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(jsonPath("$", hasSize((0))));

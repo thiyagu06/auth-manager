@@ -48,7 +48,7 @@ public class JwtAuthenticationFilterTest {
 
 	@Before
 	public void setUp() throws Exception {
-		LoggedInUserDetails principal = new LoggedInUserDetails("USERNAME", "", new ArrayList<>(), "123445454545");
+		LoggedInUserDetails principal = new LoggedInUserDetails("USERNAME", "", new ArrayList<>(), "123445454545","US");
 		UsernamePasswordAuthenticationToken rodRequest = new UsernamePasswordAuthenticationToken(principal, "testUser");
 		rodRequest.setDetails(new WebAuthenticationDetails(new MockHttpServletRequest()));
 		authentication = new UsernamePasswordAuthenticationToken(principal, "koala", new ArrayList<>());
@@ -93,6 +93,7 @@ public class JwtAuthenticationFilterTest {
 		request.setServletPath("/test");
 		when(claims.getSubject()).thenReturn("USERNAME");
 		when(claims.get("userId")).thenReturn("userId");
+		when(claims.get("roles")).thenReturn("READ,WRITE");
 
 		// Test
 		assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();

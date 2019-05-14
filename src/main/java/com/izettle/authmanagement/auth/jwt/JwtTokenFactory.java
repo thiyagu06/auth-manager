@@ -1,19 +1,11 @@
 package com.izettle.authmanagement.auth.jwt;
 
-import com.izettle.authmanagement.access.PermissionAuthority;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import com.izettle.authmanagement.dto.login.LoggedInUserDetails;
@@ -80,6 +72,7 @@ public class JwtTokenFactory {
 		LoggedInUserDetails loggedInUserDetails = (LoggedInUserDetails) authentication.getPrincipal();
 		String token = Jwts.builder().setSubject(authentication.getName())
 				.claim("roles","READ,WRITE")
+				.claim("country","US")
 				.claim("userId", loggedInUserDetails.getUserId()).signWith(SignatureAlgorithm.HS512, jwtSettings.getSecret().getBytes())
 				.setExpiration(Date.from(expiresAt.atZone((ZoneId.systemDefault())).toInstant())).compact();
 		return token;

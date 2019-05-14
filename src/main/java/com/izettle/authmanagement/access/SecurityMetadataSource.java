@@ -19,7 +19,8 @@ public class SecurityMetadataSource extends AbstractMethodSecurityMetadataSource
         //to implement findAnnotation
         PermissionRequired annotation = findAnnotation(method, targetClass, PermissionRequired.class);
         if (annotation != null) {
-            return Collections.singletonList(new SecurityAttribute(Arrays.asList(annotation.value())));
+        	PermissionAttribute permissionAttribute = new PermissionAttribute(annotation.country(), Arrays.asList(annotation.value()));
+        	return Collections.singletonList(new SecurityAttribute(Arrays.asList(annotation.value()), permissionAttribute));
         }
         return Collections.emptyList();
     }
